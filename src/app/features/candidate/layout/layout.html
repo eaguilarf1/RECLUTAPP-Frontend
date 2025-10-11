@@ -1,0 +1,45 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="brand">Panel del Candidato</div>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/candidato/inicio" routerLinkActive="active">
+        <mat-icon>home</mat-icon>
+        <span>Inicio</span>
+      </a>
+
+      <a mat-list-item routerLink="/candidato/solicitudes" routerLinkActive="active">
+        <mat-icon>work_outline</mat-icon>
+        <span>Vacantes</span>
+      </a>
+
+      <a mat-list-item routerLink="/candidato/solicitudes" routerLinkActive="active">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Mis solicitudes</span>
+      </a>
+
+      <a mat-list-item routerLink="/candidato/perfil" routerLinkActive="active">
+        <mat-icon>person</mat-icon>
+        <span>Perfil</span>
+      </a>
+
+      <mat-divider class="nav-sep"></mat-divider>
+
+      <a mat-list-item routerLink="/auth/login">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar sesión</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+
+    <mat-toolbar color="transparent" class="topbar">
+      <span class="top-title"></span>
+    </mat-toolbar>
+
+    <div class="page">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

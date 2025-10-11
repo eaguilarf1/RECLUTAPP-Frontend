@@ -1,0 +1,59 @@
+<h1 class="title">¡Bienvenido!</h1>
+
+<div class="cards">
+  <!-- Currículum -->
+  <mat-card class="card">
+    <div class="card-header">Currículum</div>
+    <div class="cv">
+      <mat-icon class="pdf">picture_as_pdf</mat-icon>
+      <div class="cv-name">{{ cvNombre }}</div>
+    </div>
+    <button mat-raised-button color="primary" class="btn">Subir nuevo</button>
+  </mat-card>
+
+  <!-- Vacantes sugeridas -->
+  <mat-card class="card">
+    <div class="card-header">Vacantes sugeridas</div>
+    <div class="suggest">
+      <div class="puesto">{{ sugerida.puesto }}</div>
+      <div class="meta">{{ sugerida.ciudad }}</div>
+      <div class="meta">{{ sugerida.fecha }}</div>
+    </div>
+    <button mat-raised-button color="primary" class="btn" routerLink="/candidato/solicitudes">Ver vacante</button>
+  </mat-card>
+</div>
+
+<h2 class="section">Mis solicitudes recientes</h2>
+
+<div class="table-wrap">
+  <table mat-table [dataSource]="solicitudes" class="mat-elevation-z0">
+    <!-- Puesto -->
+    <ng-container matColumnDef="puesto">
+      <th mat-header-cell *matHeaderCellDef>Puesto</th>
+      <td mat-cell *matCellDef="let s">{{ s.puesto }}</td>
+    </ng-container>
+
+    <!-- Fecha -->
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef>Fecha de solicitud</th>
+      <td mat-cell *matCellDef="let s">{{ s.fecha }}</td>
+    </ng-container>
+
+    <!-- Estado -->
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let s">
+        <mat-chip-set>
+          <mat-chip [ngClass]="{
+            rev: s.estado==='En revisión',
+            rej: s.estado==='Rechazada',
+            ok:  s.estado==='Aceptada'
+          }">{{ s.estado }}</mat-chip>
+        </mat-chip-set>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

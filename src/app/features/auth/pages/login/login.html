@@ -1,0 +1,33 @@
+<div class="wrap">
+  <h1 class="title">Bienvenido</h1>
+
+  <div class="cards">
+    <!-- Ingresar -->
+    <mat-card class="card">
+      <h2 class="card-title">Ingresar</h2>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="btn">Iniciar sesión</button>
+
+      <a class="link" routerLink="/auth/forgot">¿Olvidaste tu contraseña?</a>
+    </mat-card>
+
+    <!-- Registrarse -->
+    <mat-card class="card">
+      <h2 class="card-title">Registrarse</h2>
+      <p class="muted">¿Eres nuevo? Crea una cuenta aquí.</p>
+      <button mat-raised-button color="primary" class="btn" routerLink="/auth/register">
+        Crear cuenta
+      </button>
+    </mat-card>
+  </div>
+</div>
