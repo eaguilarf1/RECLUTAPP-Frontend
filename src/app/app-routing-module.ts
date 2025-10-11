@@ -44,6 +44,12 @@ const routes: Routes = [
           import('./features/candidate/pages/profile/profile')
             .then(m => m.ProfileComponent),
       },
+       {
+      path: 'vacantes',
+      loadComponent: () =>
+        import('./features/candidate/pages/vacancies/vacancies')
+          .then(m => m.VacanciesComponent),
+    },
     ],
   },
 

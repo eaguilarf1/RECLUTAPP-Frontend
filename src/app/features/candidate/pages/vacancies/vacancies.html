@@ -1,0 +1,13 @@
+<h1 class="title">Vacantes recomendadas</h1>
+
+<div class="grid">
+  <mat-card class="vac-card" *ngFor="let v of vacantes">
+    <div class="v-title">{{ v.titulo }}</div>
+    <div class="v-meta">{{ v.ciudad }}</div>
+    <div class="v-meta">{{ v.fecha }}</div>
+
+    <button mat-raised-button color="primary" class="btn" routerLink="/candidato/solicitudes">
+      Ver detalle
+    </button>
+  </mat-card>
+</div>

@@ -1,1 +1,33 @@
-<p>applications works!</p>
+<h1 class="title">Mis Solicitudes</h1>
+
+<div class="empty" *ngIf="!solicitudes?.length">
+  <div class="empty-title">Aún no has enviado solicitudes</div>
+  <div class="empty-sub">Cuando postules a una vacante, aparecerá aquí.</div>
+</div>
+
+<div class="table-wrap" *ngIf="solicitudes?.length">
+  <table mat-table [dataSource]="solicitudes" class="mat-elevation-z0">
+
+    <ng-container matColumnDef="puesto">
+      <th mat-header-cell *matHeaderCellDef>Puesto</th>
+      <td mat-cell *matCellDef="let s">{{ s.puesto }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef>Fecha de solicitud</th>
+      <td mat-cell *matCellDef="let s" class="fecha">{{ s.fecha }}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let s">
+        <mat-chip-set>
+          <mat-chip [ngClass]="estadoClass(s.estado)">{{ s.estado }}</mat-chip>
+        </mat-chip-set>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row        *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
