@@ -37,3 +37,17 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.pwd-dialog .mat-mdc-dialog-surface {
+  border-radius: 16px;
+}
+
+.pwd-dialog .mat-mdc-dialog-content {
+  max-height: calc(90vh - 120px); 
+  overflow: auto;
+}
+
+.pwd-dialog .dialog-content {
+  display: grid;
+  gap: 12px;
+}

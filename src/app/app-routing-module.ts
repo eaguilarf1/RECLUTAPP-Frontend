@@ -50,6 +50,12 @@ const routes: Routes = [
         import('./features/candidate/pages/vacancies/vacancies')
           .then(m => m.VacanciesComponent),
     },
+    {
+  path: 'vacantes/:id',
+  loadComponent: () =>
+    import('./features/candidate/pages/vacancy-detail/vacancy-detail')
+      .then(m => m.VacancyDetailComponent),
+},
     ],
   },
 

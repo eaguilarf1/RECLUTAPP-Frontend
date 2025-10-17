@@ -1,0 +1,56 @@
+<div class="wrap">
+  <mat-card class="card">
+    <div class="job-head">
+      <div class="job-title">Postulación para {{ vacante?.titulo }}</div>
+      <div class="job-sub">{{ vacante?.empresa || 'Empresa' }}</div>
+      <div class="job-meta">{{ vacante?.ciudad }}</div>
+      <div class="job-meta">{{ vacante?.fecha }}</div>
+    </div>
+
+    <mat-divider class="sep"></mat-divider>
+
+    <div class="section">
+      <div class="section-title">Descripción del puesto</div>
+      <ul class="desc" *ngIf="vacante?.descripcion?.length">
+        <li *ngFor="let d of vacante?.descripcion">{{ d }}</li>
+      </ul>
+    </div>
+
+    <mat-divider class="sep"></mat-divider>
+
+    <div class="section">
+      <div class="section-title">Información de contacto</div>
+
+      <form class="form" [formGroup]="form" (ngSubmit)="postular()">
+        <mat-form-field appearance="outline" class="field compact">
+          <mat-label>Nombre completo</mat-label>
+          <input matInput formControlName="nombre" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field compact">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput type="email" formControlName="email" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field compact">
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono" placeholder="+502 0000 0000" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Mensaje/Carta de presentación (opcional)</mat-label>
+          <textarea matInput rows="3" formControlName="cover"></textarea>
+        </mat-form-field>
+
+<div class="cv-row">
+  <label class="cv-box" for="cvInput">
+    <mat-icon>picture_as_pdf</mat-icon>
+    <span>{{ cvTexto }}</span> 
+  </label>
+  <input id="cvInput" type="file" accept="application/pdf" (change)="onSelectCV($event)" hidden />
+  <button mat-raised-button color="primary" class="apply" type="submit">Postularme</button>
+</div>
+      </form>
+    </div>
+  </mat-card>
+</div>

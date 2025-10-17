@@ -1,0 +1,29 @@
+.title { font-size: 28px; margin: 6px 0 18px; font-weight: 700; }
+
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+
+  .avatar mat-icon { font-size: 96px; height: 96px; width: 96px; color: #9ca3af; }
+  .name { font-size: 28px; font-weight: 700; }
+  .actions { display: flex; gap: 10px; }
+}
+
+.sep { margin: 6px 0 18px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  max-width: 980px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.col { display: grid; gap: 12px; }
+.field { width: 100%; }

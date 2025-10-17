@@ -1,0 +1,46 @@
+.wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #f7f7fb;
+}
+
+.card {
+  width: min(520px, 92vw);
+  padding: 18px 20px 16px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin: 2px 0 10px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.form { display: grid; gap: 12px; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  @media (max-width: 680px) { grid-template-columns: 1fr; }
+}
+
+.field.compact { width: 100%; }
+.field.compact .mat-mdc-text-field-wrapper { height: 44px; }
+.field.compact .mat-mdc-form-field-infix {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+.field.compact .mat-mdc-form-field-subscript-wrapper { margin-top: 2px; }
+
+.btn { width: 100%; margin-top: 6px; }
+.login-link { text-align: center; margin-top: 6px; }
+.login-link a { text-decoration: none; color: #1d4ed8; font-weight: 600; }
+.login-link a:hover { text-decoration: underline; }

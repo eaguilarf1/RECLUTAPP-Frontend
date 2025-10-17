@@ -1,1 +1,62 @@
-<p>register works!</p>
+<div class="wrap">
+  <mat-card class="card">
+    <h1 class="title">Crear cuenta</h1>
+
+    <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="field compact">
+        <mat-label>Nombre completo</mat-label>
+        <input matInput formControlName="nombre" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field compact">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field compact">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono" placeholder="+502 0000 0000" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field compact">
+        <mat-label>Contraseña</mat-label>
+        <input matInput [type]="hidePwd ? 'password' : 'text'" formControlName="password" autocomplete="new-password" required />
+        <button mat-icon-button matSuffix type="button" (click)="hidePwd = !hidePwd" aria-label="Mostrar/ocultar">
+          <mat-icon>{{ hidePwd ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field compact">
+        <mat-label>Confirmar contraseña</mat-label>
+        <input matInput [type]="hidePwd2 ? 'password' : 'text'" formControlName="confirmar" autocomplete="new-password" required />
+        <button mat-icon-button matSuffix type="button" (click)="hidePwd2 = !hidePwd2" aria-label="Mostrar/ocultar">
+          <mat-icon>{{ hidePwd2 ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        <mat-hint *ngIf="form.hasError('mismatch') && form.touched" style="color:#b91c1c">
+          Las contraseñas no coinciden.
+        </mat-hint>
+      </mat-form-field>
+
+      <div class="row">
+        <mat-form-field appearance="outline" class="field compact">
+          <mat-label>Profesión</mat-label>
+          <input matInput formControlName="profesion" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field compact">
+          <mat-label>Años de experiencia</mat-label>
+          <input matInput type="number" min="0" formControlName="experiencia" required />
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" class="btn" type="submit" [disabled]="form.invalid">
+        Crear cuenta
+      </button>
+
+      <div class="login-link">
+        ¿Ya tienes cuenta? <a routerLink="/auth/login">Inicia sesión</a>
+      </div>
+    </form>
+  </mat-card>
+</div>
+

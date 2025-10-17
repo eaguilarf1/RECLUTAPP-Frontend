@@ -6,7 +6,8 @@
     <div class="v-meta">{{ v.ciudad }}</div>
     <div class="v-meta">{{ v.fecha }}</div>
 
-    <button mat-raised-button color="primary" class="btn" routerLink="/candidato/solicitudes">
+    <button mat-raised-button color="primary" class="btn"
+        [routerLink]="['/candidato/vacantes', v.id]">
       Ver detalle
     </button>
   </mat-card>
