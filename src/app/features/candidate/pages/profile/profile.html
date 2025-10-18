@@ -5,10 +5,24 @@
     <mat-icon>account_circle</mat-icon>
   </div>
   <div class="name">{{ f['nombre'].value || 'Nombre' }}</div>
+
   <div class="actions">
+    <!-- Botón nuevo: Adjuntar curriculum -->
+    <input
+      #cvInput
+      type="file"
+      accept="application/pdf,.pdf"
+      hidden
+      (change)="onCvSelected($event)" />
+
+    <button mat-stroked-button (click)="cvInput.click()">
+      Adjuntar curriculum
+    </button>
+
     <button mat-stroked-button (click)="abrirCambiarPassword()">
       Cambiar contraseña
     </button>
+
     <button mat-raised-button color="primary" (click)="guardar()">
       Guardar cambios
     </button>

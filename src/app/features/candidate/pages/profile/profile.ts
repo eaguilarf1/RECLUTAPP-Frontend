@@ -23,6 +23,9 @@ export class ProfileComponent {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
 
+  // nombre del archivo cargado (opcional, por si luego quieres mostrarlo)
+  cvFileName: string | null = null;
+
   form = this.fb.group({
     nombre: ['Edward Aguilar', [Validators.required, Validators.minLength(3)]],
     email: ['edwardaguilar@example.com', [Validators.required, Validators.email]],
@@ -39,28 +42,55 @@ export class ProfileComponent {
       this.form.markAllAsTouched();
       return;
     }
-
     console.log('Perfil guardado:', this.form.value);
     alert('Perfil actualizado (mock).');
   }
 
-abrirCambiarPassword() {
-  this.dialog.open(ChangePasswordDialog, {
-    width: 'min(480px, 90vw)',  
-    maxWidth: '90vw',
-    maxHeight: '90vh',          
-    autoFocus: false,
-    disableClose: true,
-    panelClass: 'pwd-dialog', 
-  });
-}
+  abrirCambiarPassword() {
+    this.dialog.open(ChangePasswordDialog, {
+      width: 'min(480px, 90vw)',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      autoFocus: false,
+      disableClose: true,
+      panelClass: 'pwd-dialog',
+    });
+  }
+
+  // === Nuevo: manejo de “Adjuntar curriculum” ===
+  onCvSelected(evt: Event) {
+    const input = evt.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) { return; }
+
+    // Validaciones básicas en cliente: solo PDF, tamaño <= 5 MB
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    const maxBytes = 5 * 1024 * 1024; // 5 MB
+
+    if (!isPdf) {
+      alert('Solo se permiten archivos PDF.');
+      input.value = '';
+      return;
+    }
+    if (file.size > maxBytes) {
+      alert('El archivo supera el tamaño máximo permitido (5 MB).');
+      input.value = '';
+      return;
+    }
+
+    this.cvFileName = file.name;
+    // Aquí en el futuro llamarás a tu servicio para subir el PDF al backend:
+    // this.perfilService.subirCv(file).subscribe(...)
+    console.log('CV seleccionado:', file.name, file.type, file.size);
+    alert('Curriculum adjuntado (mock): ' + file.name);
+  }
 }
 
 @Component({
   selector: 'change-password-dialog',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule],
- template: `
+  template: `
     <h2 mat-dialog-title>Cambiar contraseña</h2>
 
     <form [formGroup]="pwdForm" (ngSubmit)="cambiar()">
@@ -100,14 +130,16 @@ export class ChangePasswordDialog {
   private dialog = inject(MatDialog);
 
   pwdForm = this.fb.group({
-    actual: ['',[Validators.required]],
-    nueva: ['',[Validators.required, Validators.minLength(6)]],
-    confirmacion: ['',[Validators.required]],
-  }, { validators: (group) => {
+    actual: ['', [Validators.required]],
+    nueva: ['', [Validators.required, Validators.minLength(6)]],
+    confirmacion: ['', [Validators.required]],
+  }, {
+    validators: (group) => {
       const n = group.get('nueva')?.value;
       const c = group.get('confirmacion')?.value;
       return n && c && n !== c ? { mismatch: true } : null;
-    }});
+    }
+  });
 
   cambiar() {
     if (this.pwdForm.invalid) { this.pwdForm.markAllAsTouched(); return; }
@@ -116,5 +148,6 @@ export class ChangePasswordDialog {
     alert('Contraseña actualizada (mock).');
     this.cerrar();
   }
+
   cerrar() { this.dialog.closeAll(); }
 }

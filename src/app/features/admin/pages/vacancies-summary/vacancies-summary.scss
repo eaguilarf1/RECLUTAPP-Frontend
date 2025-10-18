@@ -17,7 +17,7 @@
 .title {
   margin: 0;
   font-weight: 800;
-  font-size: 28px;       
+  font-size: 28px;
   line-height: 1.15;
 }
 
@@ -50,16 +50,18 @@
 
 .table-card { padding: 0; }
 
-table.full {
-  width: 100%;
-}
+table.full { width: 100%; }
 
-th[mat-header-cell] {
-  font-weight: 700;
-}
+th[mat-header-cell] { font-weight: 700; }
 
-td[mat-cell], th[mat-header-cell] {
-  padding: 14px 16px;
+td[mat-cell], th[mat-header-cell] { padding: 14px 16px; }
+
+.actions-h { width: 140px; }
+.actions-c {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
 }
 
 @media (max-width: 900px) {

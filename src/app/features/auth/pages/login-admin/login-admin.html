@@ -1,0 +1,40 @@
+<section class="hero">
+  <div class="hero__inner">
+    <div class="brand">
+      <div class="brand__mark">R</div>
+      <div class="brand__text">RECLUTAPP</div>
+    </div>
+    <h1>Bienvenido a <span>RECLUTAPP</span></h1>
+    <p class="sub">Acceso para <strong>Administradores</strong></p>
+  </div>
+</section>
+
+<div class="shell">
+
+  <div class="grid grid--single">
+    <article class="card card--solid">
+      <header class="card__head">
+        <h2>Ingresar</h2>
+        <p class="muted">Usa tus credenciales de administrador.</p>
+      </header>
+
+      <div class="card__body">
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="field">
+            <label for="email">Correo electrónico</label>
+            <input id="email" type="email" placeholder="admin@reclutapp.com" formControlName="email" />
+          </div>
+
+          <div class="field">
+            <label for="password">Contraseña</label>
+            <input id="password" type="password" placeholder="••••••••" formControlName="password" />
+          </div>
+
+          <button class="btn btn--primary btn--xl btn--pill" type="submit">Iniciar sesión</button>
+
+          <a class="link" [routerLink]="['/auth/forgot']">¿Olvidaste tu contraseña?</a>
+        </form>
+      </div>
+    </article>
+  </div>
+</div>

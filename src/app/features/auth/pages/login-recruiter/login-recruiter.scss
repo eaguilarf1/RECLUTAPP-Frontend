@@ -186,10 +186,7 @@
   &:hover { text-decoration: underline; }
 }
 
-a.btn {
-  text-decoration: none !important;
-}
-a.btn:hover,
-a.btn:focus {
-  text-decoration: none !important;
+.grid--single {
+  grid-template-columns: minmax(280px, 640px);
+  justify-content: center;
 }

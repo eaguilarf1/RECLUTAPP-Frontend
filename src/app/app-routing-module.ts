@@ -15,6 +15,18 @@ const routes: Routes = [
       import('./features/auth/pages/register/register').then(m => m.RegisterComponent),
   },
   {
+  path: 'auth/login-reclutador',
+  loadComponent: () =>
+    import('./features/auth/pages/login-recruiter/login-recruiter')
+      .then(m => m.LoginRecruiterComponent),
+},
+{
+  path: 'auth/login-admin',
+  loadComponent: () =>
+    import('./features/auth/pages/login-admin/login-admin')
+      .then(m => m.LoginAdminComponent),
+},
+  {
     path: 'auth/forgot',
     loadComponent: () =>
       import('./features/auth/pages/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent),
