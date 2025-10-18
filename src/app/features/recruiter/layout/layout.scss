@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  overflow-x: hidden !important;
+}
+:host ::ng-deep .mat-drawer-container,
+:host ::ng-deep .mat-drawer-content {
+  overflow-x: hidden !important;  
+}
+
+.shell { height: 100dvh; width: 100%; }
+
+.sidenav {
+  width: 260px;                    
+  padding: 12px 10px;              
+  background: #f8fafc;
+  border-right: none;              
+  box-sizing: border-box;
+
+  overflow-y: auto;
+  overflow-x: hidden !important;
+
+  scrollbar-width: thin;          
+  scrollbar-color: transparent transparent;
+}
+.sidenav::-webkit-scrollbar {    
+  height: 0; width: 0;
+}
+
+.sidenav .mat-drawer-inner-container {
+  overflow-y: auto;
+  overflow-x: hidden !important;
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--mat-sys-primary);
+  margin: 4px 8px 10px;
+}
+
+:host ::ng-deep .mdc-list {  
+  padding: 0 !important;
+}
+
+mat-nav-list a.mat-mdc-list-item {
+  border-radius: 12px;
+  margin: 2px 2px;           
+}
+mat-nav-list a.active { background: #e9eefc; }
+
+.nav-sep { margin: 10px 6px; }
+.logout  { margin: 6px 4px 0; }
+
+.content {
+  height: 100%;
+  background: #fbfbfe;
+  padding: 18px 16px 24px;     
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden !important; 
+}

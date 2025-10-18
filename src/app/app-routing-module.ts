@@ -20,6 +20,7 @@ const routes: Routes = [
       import('./features/auth/pages/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent),
   },
   
+    // --- CANDIDATO ---
    {
     path: 'candidato',
     loadComponent: () =>
@@ -58,6 +59,29 @@ const routes: Routes = [
 },
     ],
   },
+
+  // --- RECLUTADOR ---
+{
+  path: 'reclutador',
+  loadComponent: () =>
+    import('./features/recruiter/layout/layout').then(m => m.RecruiterLayoutComponent),
+  children: [
+    {
+      path: 'inicio',
+      loadComponent: () =>
+        import('./features/recruiter/pages/dashboard/dashboard')
+          .then(m => m.RecruiterDashboardComponent),
+    },
+    {
+  path: 'crear-vacante',
+  loadComponent: () =>
+    import('./features/recruiter/pages/create-vacancy/create-vacancy')
+      .then(m => m.CreateVacancyComponent),
+},
+
+    { path: '', pathMatch: 'full', redirectTo: 'inicio' },
+  ],
+},
 
   { path: '**', redirectTo: 'auth/login' },
 ];

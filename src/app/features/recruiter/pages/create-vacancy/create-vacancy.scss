@@ -1,0 +1,7 @@
+.wrap { padding: 24px; display: flex; justify-content: center; }
+.card {
+  width: 100%; max-width: 860px; padding: 22px 24px;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+}
+.title { margin: 0 0 8px; font-size: 24px; font-weight: 800; }

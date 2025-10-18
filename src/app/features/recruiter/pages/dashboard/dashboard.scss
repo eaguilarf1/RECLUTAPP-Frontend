@@ -1,0 +1,23 @@
+.wrap { padding: 24px; display: flex; justify-content: center; }
+.card {
+  width: 100%; max-width: 980px;
+  padding: 22px 24px 18px;
+  border: 1px solid #e5e7eb; border-radius: 16px; background: #fff;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+}
+.title { font-size: 28px; font-weight: 800; margin: 0 0 14px; color:#1f2937; }
+
+.cta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 6px; }
+.cta { height: 44px; }
+
+.sep { margin: 14px 0; }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+
+.table-wrap { overflow: auto; border-radius: 12px; border: 1px solid #eaecef; }
+table { width: 100%; }
+th, td { padding: 12px 14px; }
+th { font-weight: 700; color: #374151; background: #fafafa; }
+
+mat-chip { border-radius: 12px; font-weight: 600; }
+.chip-open  { background: #d1fae5; color: #065f46; }
+.chip-closed{ background: #e5e7eb; color: #374151; }
