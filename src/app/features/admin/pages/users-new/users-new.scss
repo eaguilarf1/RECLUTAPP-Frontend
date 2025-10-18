@@ -1,0 +1,54 @@
+:host { display: block; }
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 28px;         /* antes 32px */
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+
+.card { padding: 8px 8px 16px; }
+
+.form { display: grid; gap: 12px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;               /* un poco menos separación */
+}
+
+.field { width: 100%; }
+
+/* ↓ Ajustes de tamaño para los campos (Material) */
+.field .mdc-text-field__input,
+.field .mat-mdc-select-value,
+.field .mat-mdc-floating-label {
+  font-size: 0.95rem;      /* antes ~1rem */
+}
+
+.mat-mdc-form-field-subscript-wrapper {  /* hints / mensajes */
+  font-size: 0.8rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.actions button {
+  font-size: 0.95rem;      /* Botones un poco más compactos */
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .title { font-size: 24px; }
+}

@@ -1,0 +1,60 @@
+<div class="page">
+  <h1 class="title">Crear usuario</h1>
+
+  <mat-card class="card">
+    <form [formGroup]="form" (ngSubmit)="crear()" class="form">
+      <div class="grid">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Nombre completo</mat-label>
+          <input matInput formControlName="nombre" />
+          <mat-hint *ngIf="f['nombre'].touched && f['nombre'].invalid">
+            Ingresa un nombre válido.
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput type="email" formControlName="email" />
+          <mat-hint *ngIf="f['email'].touched && f['email'].invalid">
+            Ingresa un correo válido.
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Rol</mat-label>
+          <mat-select formControlName="rol">
+            <mat-option *ngFor="let r of roles" [value]="r">{{ r }}</mat-option>
+          </mat-select>
+          <mat-hint *ngIf="f['rol'].touched && f['rol'].invalid">
+            Selecciona un rol.
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Contraseña temporal</mat-label>
+          <input matInput type="password" formControlName="password" autocomplete="new-password" />
+          <mat-hint *ngIf="f['password'].touched && f['password'].invalid">
+            Mínimo 6 caracteres.
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Confirmar contraseña</mat-label>
+          <input matInput type="password" formControlName="confirm" autocomplete="new-password" />
+          <mat-hint *ngIf="form.hasError('mismatch') && f['confirm'].touched">
+            Las contraseñas no coinciden.
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+<div class="actions">
+  <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" type="submit">
+    <mat-icon>save</mat-icon>
+    Guardar
+  </button>
+</div>
+
+    </form>
+  </mat-card>
+</div>

@@ -105,7 +105,8 @@ const routes: Routes = [
 {
   path: 'admin',
   loadComponent: () =>
-    import('./features/admin/layout/layout').then(m => m.AdminLayoutComponent),
+    import('./features/admin/layout/layout')
+      .then(m => m.AdminLayoutComponent),
   children: [
     {
       path: 'inicio',
@@ -113,20 +114,28 @@ const routes: Routes = [
         import('./features/admin/pages/dashboard/dashboard')
           .then(m => m.AdminDashboardComponent),
     },
-    { path: '', pathMatch: 'full', redirectTo: 'inicio' }
-  ]
-},
-{
-  path: 'usuarios',
+    {
+      path: 'usuarios',
+      loadComponent: () =>
+        import('./features/admin/pages/users/users')
+          .then(m => m.AdminUsersComponent),
+    },
+        {
+  path: 'usuarios/nuevo',
   loadComponent: () =>
-    import('./features/admin/pages/dashboard/dashboard')
-      .then(m => m.AdminDashboardComponent) // temporal: reutilizamos el dashboard
+    import('./features/admin/pages/users-new/users-new')
+      .then(m => m.AdminUserNewComponent),
 },
-{
-  path: 'resumen-vacantes',
-  loadComponent: () =>
-    import('./features/admin/pages/dashboard/dashboard')
-      .then(m => m.AdminDashboardComponent) // temporal: reutilizamos el dashboard
+
+    /*
+    {
+      path: 'resumen-vacantes',
+      loadComponent: () =>
+        import('./features/admin/pages/vacancies-summary/vacancies-summary')
+          .then(m => m.AdminSummaryComponent), 
+    },*/
+    { path: '', pathMatch: 'full', redirectTo: 'inicio' },
+  ],
 },
 
   { path: '**', redirectTo: 'auth/login' },

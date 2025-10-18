@@ -1,0 +1,46 @@
+.page{
+  width: 100%;
+  max-width: 1040px;      
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.page-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+
+  .title{
+    margin:0;
+    font-size: 28px;
+    font-weight: 800;     
+    letter-spacing:.2px;
+  }
+
+  button mat-icon{ margin-right:6px; }
+}
+
+.table-card{
+  border-radius: 16px;
+  background: var(--mat-sys-surface);
+  overflow: hidden;
+}
+
+.app-table{
+  width: 100%;
+
+  th{
+    font-weight: 600;
+    color: #1f2937;
+    background: #f7f8fa;
+  }
+
+  th, td{
+    padding: 14px 16px;
+    border-bottom: 1px solid #eceef3;
+  }
+
+  tr:last-child td{ border-bottom: none; }
+}

@@ -3,28 +3,24 @@
     <div class="brand">RECLUTAPP</div>
 
     <nav class="nav">
-      <a routerLink="/admin/inicio" routerLinkActive="active">
-        <mat-icon>home</mat-icon>
-        <span>Inicio</span>
-      </a>
+  <a mat-list-item routerLink="/admin/inicio" routerLinkActive="active">
+    <mat-icon>home</mat-icon><span>Inicio</span>
+  </a>
 
-      <a routerLink="/admin/usuarios" routerLinkActive="active">
-        <mat-icon>groups</mat-icon>
-        <span>Usuarios</span>
-      </a>
+  <a mat-list-item routerLink="/admin/usuarios" routerLinkActive="active">
+    <mat-icon>group</mat-icon><span>Usuarios</span>
+  </a>
 
-      <a routerLink="/admin/resumen-vacantes" routerLinkActive="active">
-        <mat-icon>analytics</mat-icon>
-        <span>Resumen de vacantes</span>
-      </a>
+  <a mat-list-item routerLink="/admin/resumen-vacantes" routerLinkActive="active">
+    <mat-icon>insights</mat-icon><span>Resumen de vacantes</span>
+  </a>
 
-      <mat-divider class="sep"></mat-divider>
+  <mat-divider class="mat-divider"></mat-divider>
 
-      <a routerLink="/auth/login">
-        <mat-icon>logout</mat-icon>
-        <span>Cerrar sesión</span>
-      </a>
-    </nav>
+  <a mat-list-item routerLink="/auth/login">
+    <mat-icon>logout</mat-icon><span>Cerrar sesión</span>
+  </a>
+</nav>
   </aside>
 
   <main class="content">
