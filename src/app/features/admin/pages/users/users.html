@@ -1,39 +1,108 @@
 <div class="page">
   <div class="page-header">
-    <h1 class="title">Gestión de Usuarios</h1>
-
-<button mat-raised-button color="primary" class="add-btn" (click)="goNew()">
-  <mat-icon>person_add</mat-icon>
-  Crear nuevo
-</button>
-
+    <h1>Gestión de Usuarios</h1>
+    <button mat-stroked-button color="primary">
+      <mat-icon>person_add</mat-icon>
+      Crear nuevo
+    </button>
   </div>
 
-  <div class="table-card mat-elevation-z1">
-    <table mat-table [dataSource]="data" class="app-table">
+  <div class="table-card">
+    <table mat-table [dataSource]="data" class="users-table">
 
+      <!-- NOMBRE -->
       <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef> Nombre </th>
-        <td mat-cell *matCellDef="let u"> {{ u.nombre }} </td>
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let row" [class.edit-row]="isEditing(row)">
+          <ng-container *ngIf="!isEditing(row); else editNombre">
+            <span class="cell-text">{{ row.nombre }}</span>
+          </ng-container>
+          <ng-template #editNombre>
+            <form [formGroup]="editForm" class="inline-form">
+              <mat-form-field appearance="outline" class="compact full">
+                <input matInput formControlName="nombre" />
+              </mat-form-field>
+            </form>
+          </ng-template>
+        </td>
       </ng-container>
 
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef> Correo electrónico </th>
-        <td mat-cell *matCellDef="let u"> {{ u.email }} </td>
+      <!-- CORREO -->
+      <ng-container matColumnDef="correo">
+        <th mat-header-cell *matHeaderCellDef>Correo electrónico</th>
+        <td mat-cell *matCellDef="let row" [class.edit-row]="isEditing(row)">
+          <ng-container *ngIf="!isEditing(row); else editCorreo">
+            <span class="cell-text">{{ row.correo }}</span>
+          </ng-container>
+          <ng-template #editCorreo>
+            <form [formGroup]="editForm" class="inline-form">
+              <mat-form-field appearance="outline" class="compact full">
+                <input matInput formControlName="correo" />
+              </mat-form-field>
+            </form>
+          </ng-template>
+        </td>
       </ng-container>
 
+      <!-- ROL -->
       <ng-container matColumnDef="rol">
-        <th mat-header-cell *matHeaderCellDef> Rol </th>
-        <td mat-cell *matCellDef="let u"> {{ u.rol }} </td>
+        <th mat-header-cell *matHeaderCellDef>Rol</th>
+        <td mat-cell *matCellDef="let row" [class.edit-row]="isEditing(row)">
+          <ng-container *ngIf="!isEditing(row); else editRol">
+            <span class="cell-text">{{ row.rol }}</span>
+          </ng-container>
+          <ng-template #editRol>
+            <form [formGroup]="editForm" class="inline-form">
+              <mat-form-field appearance="outline" class="compact full">
+                <mat-select formControlName="rol">
+                  <mat-option *ngFor="let r of roles" [value]="r">{{ r }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+          </ng-template>
+        </td>
       </ng-container>
 
+      <!-- FECHA -->
       <ng-container matColumnDef="fecha">
-        <th mat-header-cell *matHeaderCellDef> Fecha de registro </th>
-        <td mat-cell *matCellDef="let u"> {{ u.fecha }} </td>
+        <th mat-header-cell *matHeaderCellDef>Fecha de registro</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="cell-text">{{ row.fecha }}</span>
+        </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayed"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayed;"></tr>
+      <!-- ACCIONES -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef class="actions-header">Acciones</th>
+        <td mat-cell *matCellDef="let row" class="actions-cell" [class.edit-row]="isEditing(row)">
+          <!-- Modo lectura -->
+          <div class="actions" *ngIf="!isEditing(row); else editActions">
+            <button mat-icon-button matTooltip="Editar" (click)="startEdit(row)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="delete(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+
+          <!-- Modo edición -->
+          <ng-template #editActions>
+            <div class="edit-actions">
+              <button mat-flat-button color="primary" class="sm" (click)="saveEdit(row)">
+                <mat-icon>check</mat-icon>
+                Guardar
+              </button>
+              <button mat-stroked-button class="sm" (click)="cancelEdit()">
+                <mat-icon>close</mat-icon>
+                Cancelar
+              </button>
+            </div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="sticky"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
 </div>

@@ -118,7 +118,7 @@ const routes: Routes = [
       path: 'usuarios',
       loadComponent: () =>
         import('./features/admin/pages/users/users')
-          .then(m => m.AdminUsersComponent),
+          .then(m => m.AdminUsersPage),
     },
         {
   path: 'usuarios/nuevo',

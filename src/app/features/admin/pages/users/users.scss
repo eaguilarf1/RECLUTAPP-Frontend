@@ -1,46 +1,108 @@
-.page{
-  width: 100%;
-  max-width: 1040px;      
-  margin: 0 auto;
+.page {
   display: grid;
   gap: 16px;
 }
 
-.page-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
 
-  .title{
-    margin:0;
-    font-size: 28px;
-    font-weight: 800;     
-    letter-spacing:.2px;
+  h1 {
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: -0.3px;
   }
 
-  button mat-icon{ margin-right:6px; }
+  button mat-icon {
+    margin-right: 6px;
+  }
 }
 
-.table-card{
-  border-radius: 16px;
+.table-card {
   background: var(--mat-sys-surface);
-  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .07);
+  padding: 8px 0;
 }
 
-.app-table{
+.users-table {
   width: 100%;
+  table-layout: fixed; /* evita que los inputs se salgan */
+  border-spacing: 0;
 
-  th{
-    font-weight: 600;
-    color: #1f2937;
-    background: #f7f8fa;
+  th, td {
+    padding: 14px 20px;
+    vertical-align: middle;
   }
 
-  th, td{
-    padding: 14px 16px;
-    border-bottom: 1px solid #eceef3;
+  th {
+    font-weight: 700;
   }
 
-  tr:last-child td{ border-bottom: none; }
+  .sticky {
+    position: sticky;
+    top: 0;
+    background: var(--mat-sys-surface);
+    z-index: 1;
+  }
+
+  .cell-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* una línea, recorta con … */
+  }
+
+  td.edit-row {
+    /* asegura que los campos tomen todo el ancho de la celda */
+    mat-form-field.full { width: 100%; }
+  }
+
+  /* densidad compacta para inputs en línea */
+  .compact {
+    --mat-form-field-container-vertical-padding: 6px;
+    --mat-form-field-container-height: 40px;
+    --mat-form-field-subscript-text-size: 0;
+  }
+
+  /* ancho reservado para que no salte la tabla */
+  .actions-header { width: 220px; }
+  .actions-cell   { width: 220px; }
+
+  .actions,
+  .edit-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  /* botones compactos */
+  .sm {
+    height: 36px;
+    line-height: 36px;
+    padding: 0 12px;
+
+    .mat-icon, mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+      margin-right: 6px;
+    }
+  }
+
+  /* look de pastilla y sutil sombra al primario */
+  .edit-actions .mat-mdc-button-base {
+    border-radius: 9999px;
+  }
+  .edit-actions .mdc-button--raised {
+    box-shadow: var(--mat-elevation-1);
+  }
+}
+
+/* responsivo: en pantallas chicas dejamos que el correo rompa línea */
+@media (max-width: 1100px) {
+  .users-table .cell-text { white-space: normal; }
 }
