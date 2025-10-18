@@ -127,13 +127,14 @@ const routes: Routes = [
       .then(m => m.AdminUserNewComponent),
 },
 
-    /*
+
     {
       path: 'resumen-vacantes',
       loadComponent: () =>
         import('./features/admin/pages/vacancies-summary/vacancies-summary')
-          .then(m => m.AdminSummaryComponent), 
-    },*/
+          .then(m => m.AdminVacanciesSummaryComponent),
+    },
+
     { path: '', pathMatch: 'full', redirectTo: 'inicio' },
   ],
 },
