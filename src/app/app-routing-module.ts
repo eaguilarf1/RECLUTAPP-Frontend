@@ -90,6 +90,12 @@ const routes: Routes = [
     import('./features/recruiter/pages/recommendations/recommendations')
       .then(m => m.RecruiterRecommendationsComponent),
 },
+{
+  path: 'buscar-perfiles',
+  loadComponent: () =>
+    import('./features/recruiter/pages/search-profiles/search-profiles')
+      .then(m => m.RecruiterSearchProfilesComponent),
+},
 
     { path: '', pathMatch: 'full', redirectTo: 'inicio' },
   ],

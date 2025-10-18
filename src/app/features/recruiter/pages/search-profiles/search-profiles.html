@@ -1,0 +1,55 @@
+<div class="wrap">
+  <mat-card class="card">
+    <h1 class="page-title">Buscar perfiles</h1>
+    <mat-divider class="sep"></mat-divider>
+
+    <!-- Filtros -->
+    <div class="filters">
+      <mat-form-field appearance="outline" class="field full">
+        <mat-label>Buscar por puesto o habilidad</mat-label>
+        <input matInput [formControl]="q" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Ubicación</mat-label>
+        <mat-select [formControl]="loc">
+          <mat-option *ngFor="let u of ubicaciones" [value]="u">{{ u }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="field slider">
+        <div class="slider-label">Compatibilidad mínima</div>
+        <mat-slider min="0" max="100" step="1" discrete [formControl]="min">
+          <input matSliderThumb />
+        </mat-slider>
+      </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="list" *ngIf="resultados.length; else empty">
+      <mat-card class="item" *ngFor="let r of resultados">
+        <div class="row">
+          <div class="left">
+            <div class="nombre">{{ r.nombre }}</div>
+            <div class="habilidades">
+              <span class="label">Habilidades:</span>
+              <span class="vals">{{ r.habilidades.join(', ') }}</span>
+            </div>
+            <div class="score">
+              <span class="label">Puntaje de compatibilidad</span>
+              <span class="val">{{ r.score }}</span>
+            </div>
+          </div>
+
+          <div class="right">
+            <button mat-raised-button color="primary" (click)="verPerfil(r)">Ver perfil</button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <ng-template #empty>
+      <div class="empty">No se encontraron perfiles con los filtros actuales.</div>
+    </ng-template>
+  </mat-card>
+</div>

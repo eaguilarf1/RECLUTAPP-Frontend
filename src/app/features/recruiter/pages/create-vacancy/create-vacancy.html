@@ -1,6 +1,52 @@
 <div class="wrap">
-  <div class="card">
-    <h1 class="title">Crear vacante</h1>
-    <p>Formulario en construcción. Aquí irá el alta de vacantes (puesto, ubicación, salario, requisitos, estado, etc.).</p>
-  </div>
+  <mat-card class="card">
+    <h1 class="page-title">Crear vacante</h1>
+    <mat-divider class="sep"></mat-divider>
+
+    <form [formGroup]="form" (ngSubmit)="publicar()" class="form">
+      <!-- Título -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Título del puesto</mat-label>
+        <input matInput formControlName="titulo" />
+      </mat-form-field>
+
+      <!-- Descripción -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput rows="4" formControlName="descripcion"></textarea>
+      </mat-form-field>
+
+      <!-- Ubicación -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Ubicación</mat-label>
+        <mat-select formControlName="ubicacion">
+          <mat-option *ngFor="let u of ubicaciones" [value]="u">{{ u }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Fecha de inicio -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Fecha de inicio</mat-label>
+        <input matInput [matDatepicker]="dp" formControlName="fechaInicio" />
+        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp></mat-datepicker>
+      </mat-form-field>
+
+      <div class="grid-2">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Salario (opcional)</mat-label>
+          <input matInput formControlName="salario" placeholder="Q 10,000 - Q 15,000" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Modalidad (opcional)</mat-label>
+          <input matInput formControlName="modalidad" placeholder="Presencial / Remoto / Híbrido" />
+        </mat-form-field>
+      </div>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit">Publicar</button>
+      </div>
+    </form>
+  </mat-card>
 </div>
