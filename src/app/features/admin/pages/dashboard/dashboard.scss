@@ -1,0 +1,83 @@
+/* Contenedor centrado, igual que Candidate */
+.wrap { display: flex; justify-content: center; }
+
+.card {
+  width: 100%;
+  max-width: 1040px; /* un pelín más compacto */
+  padding: 18px 20px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+}
+
+/* Titulares y subtítulos con la misma escala que Candidate */
+.title {
+  /* usa la escala del sistema para headings */
+  font: var(--mat-sys-headline-medium);
+  font-weight: 800;
+  margin: 0 0 8px;
+  letter-spacing: .1px;
+}
+
+.subtitle {
+  font: var(--mat-sys-title-large);
+  font-weight: 800;
+  margin: 12px 0 8px;
+  letter-spacing: .1px;
+}
+
+/* KPIs: misma densidad visual que Candidate */
+.kpis {
+  display: grid; gap: 10px; margin-bottom: 6px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } }
+
+.kpi {
+  border: 1px solid #eaecef;
+  border-radius: 14px;
+  padding: 14px;
+  background: #f9fafb;
+}
+
+.kpi-title {
+  font: var(--mat-sys-title-medium);
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 2px;
+}
+
+.kpi-value {
+  /* más pequeño para igualar Candidate */
+  font: var(--mat-sys-display-small);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.kpi-sub {
+  font: var(--mat-sys-body-medium);
+  color: #6b7280;
+}
+
+/* Tabla con misma densidad que Candidate */
+.table-wrap {
+  border: 1px solid #eaecef;
+  border-radius: 12px;
+  overflow: auto;
+}
+
+th, td {
+  padding: 10px 12px; /* menos altura que antes */
+}
+
+th {
+  background: #fafafa;
+  color: #374151;
+  font: var(--mat-sys-title-small);
+  font-weight: 700;
+}
+
+td {
+  font: var(--mat-sys-body-medium);
+}

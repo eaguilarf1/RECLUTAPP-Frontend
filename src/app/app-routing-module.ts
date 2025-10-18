@@ -101,6 +101,34 @@ const routes: Routes = [
   ],
 },
 
+// --- ADMINISTRADOR ---
+{
+  path: 'admin',
+  loadComponent: () =>
+    import('./features/admin/layout/layout').then(m => m.AdminLayoutComponent),
+  children: [
+    {
+      path: 'inicio',
+      loadComponent: () =>
+        import('./features/admin/pages/dashboard/dashboard')
+          .then(m => m.AdminDashboardComponent),
+    },
+    { path: '', pathMatch: 'full', redirectTo: 'inicio' }
+  ]
+},
+{
+  path: 'usuarios',
+  loadComponent: () =>
+    import('./features/admin/pages/dashboard/dashboard')
+      .then(m => m.AdminDashboardComponent) // temporal: reutilizamos el dashboard
+},
+{
+  path: 'resumen-vacantes',
+  loadComponent: () =>
+    import('./features/admin/pages/dashboard/dashboard')
+      .then(m => m.AdminDashboardComponent) // temporal: reutilizamos el dashboard
+},
+
   { path: '**', redirectTo: 'auth/login' },
 ];
 

@@ -1,0 +1,35 @@
+<div class="shell">
+  <aside class="sidenav">
+    <div class="brand">RECLUTAPP</div>
+
+    <nav class="nav">
+      <a routerLink="/admin/inicio" routerLinkActive="active">
+        <mat-icon>home</mat-icon>
+        <span>Inicio</span>
+      </a>
+
+      <a routerLink="/admin/usuarios" routerLinkActive="active">
+        <mat-icon>groups</mat-icon>
+        <span>Usuarios</span>
+      </a>
+
+      <a routerLink="/admin/resumen-vacantes" routerLinkActive="active">
+        <mat-icon>analytics</mat-icon>
+        <span>Resumen de vacantes</span>
+      </a>
+
+      <mat-divider class="sep"></mat-divider>
+
+      <a routerLink="/auth/login">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar sesión</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="page">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
