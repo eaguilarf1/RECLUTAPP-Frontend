@@ -1,0 +1,26 @@
+<div class="wrap">
+  <mat-card class="card">
+    <h1 class="page-title">Recomendaciones</h1>
+    <mat-divider class="sep"></mat-divider>
+
+    <div class="list">
+      <mat-card class="item" *ngFor="let r of recomendaciones">
+        <div class="row">
+          <div class="left">
+            <div class="puesto">{{ r.puesto }}</div>
+            <div class="nombre">{{ r.candidato }}</div>
+            <div class="email">{{ r.email }}</div>
+          </div>
+
+          <div class="right">
+            <div class="fecha">{{ r.fecha }}</div>
+            <div class="actions">
+              <button mat-raised-button color="primary" (click)="verCV(r)">Ver currículum</button>
+              <button mat-stroked-button color="primary" (click)="contactar(r)">Contactar</button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card>
+</div>

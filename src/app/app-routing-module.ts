@@ -84,6 +84,12 @@ const routes: Routes = [
     import('./features/recruiter/pages/vacancies/vacancies')
       .then(m => m.RecruiterVacanciesComponent),
 },
+{
+  path: 'recomendaciones',
+  loadComponent: () =>
+    import('./features/recruiter/pages/recommendations/recommendations')
+      .then(m => m.RecruiterRecommendationsComponent),
+},
 
     { path: '', pathMatch: 'full', redirectTo: 'inicio' },
   ],
