@@ -1,0 +1,27 @@
+.wrap { padding: 24px; display: flex; justify-content: center; }
+
+.card {
+  width: 100%; max-width: 780px;
+  padding: 22px 24px 18px;
+  border: 1px solid #e5e7eb; border-radius: 16px; background: #fff;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+}
+
+.page-title { font-size: 28px; font-weight: 800; margin: 0 0 8px; color: #1f2937; }
+.sep { margin: 8px 0 12px; }
+
+.form { display: grid; gap: 14px; }
+.field { width: 100%; }
+
+.grid-2 {
+  display: grid; gap: 12px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
+
+.actions {
+  display: flex; justify-content: flex-start; margin-top: 6px;
+  gap: 12px; 
+}

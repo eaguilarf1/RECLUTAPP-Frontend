@@ -11,6 +11,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 
+import { VacanciesService } from '../../../../core/services/vacancies.service';
+
 @Component({
   selector: 'create-vacancy',
   standalone: true,
@@ -24,6 +26,7 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class CreateVacancyComponent {
   private fb = inject(FormBuilder);
+  private vacanciesSvc = inject(VacanciesService);
 
   ubicaciones = [
     'Ciudad de Guatemala',
@@ -43,17 +46,36 @@ export class CreateVacancyComponent {
   });
 
   publicar() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    console.log('Vacante publicada:', this.form.value);
-    alert('Vacante publicada (mock).');
-    this.form.reset({
-      ubicacion: 'Ciudad de Guatemala',
-      modalidad: 'Híbrido',
-      fechaInicio: new Date(),
-    });
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
   }
+
+  const rawFecha = this.form.get('fechaInicio')?.value as unknown;
+  const fecha: Date = rawFecha instanceof Date ? rawFecha : new Date(rawFecha as any);
+
+  const dto = {
+    title: this.form.value.titulo!.trim(),
+    recruiter: 'RECLUTAPP',
+    description: this.form.value.descripcion?.trim() ?? null,
+    location: this.form.value.ubicacion ?? null,
+    status: 0,
+    publishedOn: VacanciesService.toIsoUTCDate(fecha)
+  };
+
+  this.vacanciesSvc.create(dto).subscribe({
+    next: () => {
+      alert('Vacante publicada correctamente.');
+      this.form.reset({
+        titulo: '',
+        descripcion: '',
+        ubicacion: 'Ciudad de Guatemala',
+        fechaInicio: new Date()
+      });
+    },
+    error: () => {
+      alert('No fue posible publicar la vacante.');
+    }
+  });
+}
 }

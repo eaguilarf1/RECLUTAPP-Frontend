@@ -90,6 +90,12 @@ const routes: Routes = [
     import('./features/recruiter/pages/create-vacancy/create-vacancy')
       .then(m => m.CreateVacancyComponent),
 },
+    {
+      path: 'editar-vacante/:id',
+      loadComponent: () =>
+        import('./features/recruiter/pages/edit-vacancy/edit-vacancy')
+          .then(m => m.RecruiterEditVacancyComponent),
+    },
 {
   path: 'vacantes',
   loadComponent: () =>
@@ -132,19 +138,24 @@ const routes: Routes = [
         import('./features/admin/pages/users/users')
           .then(m => m.AdminUsersPage),
     },
-        {
-  path: 'usuarios/nuevo',
-  loadComponent: () =>
-    import('./features/admin/pages/users-new/users-new')
-      .then(m => m.AdminUserNewComponent),
-},
-
-
+    {
+      path: 'usuarios/nuevo',
+      loadComponent: () =>
+        import('./features/admin/pages/users-new/users-new')
+          .then(m => m.AdminUserNewComponent),
+    },
     {
       path: 'resumen-vacantes',
       loadComponent: () =>
         import('./features/admin/pages/vacancies-summary/vacancies-summary')
           .then(m => m.AdminVacanciesSummaryComponent),
+    },
+    // 👇 ¡SIN el prefijo "admin/" porque ya estás dentro de /admin!
+    {
+      path: 'editar-vacante/:id',
+      loadComponent: () =>
+        import('./features/admin/pages/edit-vacancy/edit-vacancy')
+          .then(m => m.AdminEditVacancyComponent),
     },
 
     { path: '', pathMatch: 'full', redirectTo: 'inicio' },
