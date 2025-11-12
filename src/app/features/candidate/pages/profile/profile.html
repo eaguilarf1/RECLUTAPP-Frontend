@@ -7,18 +7,6 @@
   <div class="name">{{ f['nombre'].value || 'Nombre' }}</div>
 
   <div class="actions">
-    <!-- Botón nuevo: Adjuntar curriculum -->
-    <input
-      #cvInput
-      type="file"
-      accept="application/pdf,.pdf"
-      hidden
-      (change)="onCvSelected($event)" />
-
-    <button mat-stroked-button (click)="cvInput.click()">
-      Adjuntar curriculum
-    </button>
-
     <button mat-stroked-button (click)="abrirCambiarPassword()">
       Cambiar contraseña
     </button>
@@ -32,7 +20,6 @@
 <mat-divider class="sep"></mat-divider>
 
 <form class="grid" [formGroup]="form" (ngSubmit)="guardar()">
-
   <div class="col">
     <mat-form-field appearance="outline" class="field">
       <mat-label>Nombre completo</mat-label>
@@ -50,20 +37,32 @@
     </mat-form-field>
   </div>
 
-  <div class="col">
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Ubicación</mat-label>
-      <input matInput formControlName="ubicacion" />
-    </mat-form-field>
+  <div class="col right">
+    <div class="cv-card" *ngIf="cvUrl; else emptyCv">
+      <div class="cv-title">Currículum</div>
+      <div class="cv-body">
+        <mat-icon>picture_as_pdf</mat-icon>
+        <div class="cv-name">{{ cvFileName }}</div>
+        <div class="cv-actions">
+          <button mat-stroked-button type="button" (click)="viewCv()">Ver</button>
+          <button mat-stroked-button color="primary" type="button" (click)="updateInput.click()">Actualizar</button>
+        </div>
+        <input #updateInput type="file" accept="application/pdf,.pdf" hidden (change)="onCvSelected($event)" />
+      </div>
+    </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Profesión</mat-label>
-      <input matInput formControlName="profesion" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Años de experiencia</mat-label>
-      <input matInput type="number" min="0" formControlName="experiencia" />
-    </mat-form-field>
+    <ng-template #emptyCv>
+      <div class="cv-card">
+        <div class="cv-title">Currículum</div>
+        <div class="cv-body">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <div class="cv-name">Sin archivo</div>
+          <div class="cv-actions">
+            <button mat-stroked-button color="primary" type="button" (click)="firstUpload.click()">Subir</button>
+          </div>
+          <input #firstUpload type="file" accept="application/pdf,.pdf" hidden (change)="onCvSelected($event)" />
+        </div>
+      </div>
+    </ng-template>
   </div>
 </form>

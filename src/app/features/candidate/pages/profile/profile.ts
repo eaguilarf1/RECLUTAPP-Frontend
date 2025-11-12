@@ -7,12 +7,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../../../../core/services/auth.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'candidate-profile',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule,
+    CommonModule, ReactiveFormsModule, HttpClientModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
     MatIconModule, MatDividerModule, MatDialogModule
   ],
@@ -22,18 +25,39 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 export class ProfileComponent {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
+  private http = inject(HttpClient);
+  private auth = inject(AuthService);
 
-  // nombre del archivo cargado (opcional, por si luego quieres mostrarlo)
+  private cvUrlKey!: string;
+  private cvNameKey!: string;
+
   cvFileName: string | null = null;
+  cvUrl: string | null = null;
 
   form = this.fb.group({
-    nombre: ['Edward Aguilar', [Validators.required, Validators.minLength(3)]],
-    email: ['edwardaguilar@example.com', [Validators.required, Validators.email]],
-    telefono: ['+502 2460 0000', [Validators.required]],
-    ubicacion: ['Ciudad de Guatemala', [Validators.required]],
-    profesion: ['Desarrollador Frontend', [Validators.required]],
-    experiencia: [3, [Validators.required, Validators.min(0)]],
+    nombre: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    telefono: ['+502 2460 0000', [Validators.required]]
   });
+
+  constructor() {
+    const u: any = this.auth.user ?? {};
+    const id = (u.id ?? u.userId ?? u.userID ?? '').toString();
+    const email = (u.email ?? '').toString();
+    const keyBase = id ? `cv_${id}` : (email ? `cv_${email}` : 'cv_default');
+
+    this.cvUrlKey = `${keyBase}_url`;
+    this.cvNameKey = `${keyBase}_name`;
+
+    this.cvFileName = localStorage.getItem(this.cvNameKey) ?? null;
+    this.cvUrl = localStorage.getItem(this.cvUrlKey) ?? null;
+
+    this.form.patchValue({
+      nombre: (u.name ?? u.nombre ?? '').toString().trim(),
+      email: email.trim(),
+      telefono: (u.phone ?? u.telefono ?? this.form.value.telefono) as string
+    });
+  }
 
   get f(): { [key: string]: AbstractControl } { return this.form.controls; }
 
@@ -42,8 +66,44 @@ export class ProfileComponent {
       this.form.markAllAsTouched();
       return;
     }
-    console.log('Perfil guardado:', this.form.value);
-    alert('Perfil actualizado (mock).');
+
+    const payload: any = {
+      name: (this.f['nombre'].value as string).trim(),
+      email: (this.f['email'].value as string).trim()
+    };
+
+    const base = (environment.api || '').toString().replace(/\/+$/, '');
+    const url = `${base}/me`;
+
+    this.http.put(url, payload).subscribe({
+      next: () => {
+        try {
+          const u: any = (this.auth as any).user ?? {};
+          u.name = payload.name;
+          u.email = payload.email;
+          u.phone = (this.f['telefono'].value as string).trim();
+
+          const a: any = this.auth as any;
+          if (typeof a.setUser === 'function') a.setUser(u);
+          if (a.user$?.next) a.user$.next(u);
+          a.user = u;
+
+          localStorage.setItem('user', JSON.stringify(u));
+        } catch {}
+
+        localStorage.setItem('candidate_phone', (this.f['telefono'].value as string));
+        alert('Perfil actualizado.');
+      },
+      error: (e) => {
+        const msg =
+          e?.error?.message ||
+          e?.error?.title ||
+          e?.message ||
+          'No se pudo actualizar el perfil.';
+        alert(`${msg}${e?.status ? ' (HTTP ' + e.status + ')' : ''}`);
+        console.error('PUT', url, 'failed:', e);
+      }
+    });
   }
 
   abrirCambiarPassword() {
@@ -57,39 +117,43 @@ export class ProfileComponent {
     });
   }
 
-  // === Nuevo: manejo de “Adjuntar curriculum” ===
   onCvSelected(evt: Event) {
     const input = evt.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (!file) { return; }
+    if (!file) return;
 
-    // Validaciones básicas en cliente: solo PDF, tamaño <= 5 MB
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-    const maxBytes = 5 * 1024 * 1024; // 5 MB
+    const maxBytes = 5 * 1024 * 1024;
+    if (!isPdf) { alert('Solo se permiten archivos PDF.'); input.value = ''; return; }
+    if (file.size > maxBytes) { alert('El archivo supera el tamaño máximo permitido (5 MB).'); input.value = ''; return; }
 
-    if (!isPdf) {
-      alert('Solo se permiten archivos PDF.');
-      input.value = '';
-      return;
-    }
-    if (file.size > maxBytes) {
-      alert('El archivo supera el tamaño máximo permitido (5 MB).');
-      input.value = '';
-      return;
-    }
-
+    if (this.cvUrl) URL.revokeObjectURL(this.cvUrl);
+    this.cvUrl = URL.createObjectURL(file);
     this.cvFileName = file.name;
-    // Aquí en el futuro llamarás a tu servicio para subir el PDF al backend:
-    // this.perfilService.subirCv(file).subscribe(...)
-    console.log('CV seleccionado:', file.name, file.type, file.size);
+
+    localStorage.setItem(this.cvUrlKey, this.cvUrl);
+    localStorage.setItem(this.cvNameKey, this.cvFileName);
+
     alert('Curriculum adjuntado (mock): ' + file.name);
+  }
+
+  viewCv() {
+    if (this.cvUrl) window.open(this.cvUrl, '_blank');
   }
 }
 
 @Component({
   selector: 'change-password-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
   template: `
     <h2 mat-dialog-title>Cambiar contraseña</h2>
 
@@ -128,6 +192,7 @@ export class ProfileComponent {
 export class ChangePasswordDialog {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
+  private http = inject(HttpClient);
 
   pwdForm = this.fb.group({
     actual: ['', [Validators.required]],
@@ -144,9 +209,29 @@ export class ChangePasswordDialog {
   cambiar() {
     if (this.pwdForm.invalid) { this.pwdForm.markAllAsTouched(); return; }
 
-    console.log('Cambiar contraseña (mock):', this.pwdForm.value);
-    alert('Contraseña actualizada (mock).');
-    this.cerrar();
+    const base = (environment.api || '').toString().replace(/\/+$/, '');
+    const url = `${base}/me/password`;
+
+    const payload = {
+      currentPassword: (this.pwdForm.value.actual ?? '').toString().trim(),
+      newPassword: (this.pwdForm.value.nueva ?? '').toString().trim(),
+    };
+
+    this.http.put(url, payload).subscribe({
+      next: () => {
+        alert('Contraseña actualizada.');
+        this.cerrar();
+      },
+      error: (e) => {
+        const msg =
+          e?.error?.message ||
+          e?.error?.title ||
+          e?.message ||
+          'No se pudo actualizar la contraseña.';
+        alert(`${msg}${e?.status ? ' (HTTP ' + e.status + ')' : ''}`);
+        console.error('PUT', url, 'failed:', e);
+      }
+    });
   }
 
   cerrar() { this.dialog.closeAll(); }

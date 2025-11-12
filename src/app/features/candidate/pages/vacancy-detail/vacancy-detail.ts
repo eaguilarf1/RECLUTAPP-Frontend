@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
 import { VacanciesService, VacancyItem } from '../../../../core/services/vacancies.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 type Vacante = {
   id: string;
@@ -37,12 +38,13 @@ export class VacancyDetailComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private vacanciesSvc = inject(VacanciesService);
+  private auth = inject(AuthService);
 
   vacante?: Vacante;
   cvNombre: string | null = null;
 
   get cvTexto() {
-    return this.cvNombre ?? 'Adjuntar currículum';
+    return this.cvNombre ?? 'No tienes currículum guardado. Actualízalo en tu perfil.';
   }
 
   private readonly GT_PHONE = /^(?:\+502\s?)?(?:\d{4}[-\s]?\d{4})$/;
@@ -57,6 +59,32 @@ export class VacancyDetailComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    const a: any = this.auth as any;
+    let u: any = a?.user;
+    if (!u) {
+      try {
+        u = JSON.parse(localStorage.getItem('user') ?? 'null') ?? {};
+      } catch {
+        u = {};
+      }
+    }
+
+    const current = this.form.value;
+    const phone = (u.phone ?? u.telefono ?? localStorage.getItem('candidate_phone') ?? current.telefono) as string;
+
+    this.form.patchValue({
+      nombre: (((u.name ?? u.nombre ?? '') as string).toString().trim()) || (current.nombre as string),
+      email: (((u.email ?? '') as string).toString().trim()) || (current.email as string),
+      telefono: phone || (current.telefono as string),
+    });
+
+    const idKey = (u.id ?? u.userId ?? u.userID ?? '').toString();
+    const emailKey = (u.email ?? '').toString();
+    const keyBase = idKey ? `cv_${idKey}` : (emailKey ? `cv_${emailKey}` : 'cv_default');
+    const cvNameKey = `${keyBase}_name`;
+    const existingCvName = localStorage.getItem(cvNameKey);
+    if (existingCvName) this.cvNombre = existingCvName;
+
     const id = String(this.route.snapshot.paramMap.get('id'));
     this.vacanciesSvc.get(id).subscribe((v: VacancyItem) => {
       this.vacante = {
