@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 
 type Solicitud = { puesto: string; fecha: string; estado: 'En revisión' | 'Rechazada' | 'Aceptada' };
 
@@ -21,6 +22,9 @@ type Solicitud = { puesto: string; fecha: string; estado: 'En revisión' | 'Rech
   styleUrls: ['./dashboard.scss'],
 })
 export class DashboardComponent {
+  private auth = inject(AuthService);
+  displayName = 'Usuario';
+
   cvNombre = 'curriculum.pdf';
   sugerida = { puesto: 'Desarrollador Frontend', ciudad: 'Ciudad de Guatemala', fecha: '01/09/2025' };
 
@@ -29,5 +33,11 @@ export class DashboardComponent {
     { puesto: 'Analista de datos',     fecha: '15/08/2025', estado: 'En revisión' },
     { puesto: 'Ingeniero de software', fecha: '10/08/2025', estado: 'Rechazada'  },
   ];
-}
 
+  constructor() {
+    const u = this.auth.user || {};
+    const full = `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim();
+    const name = u.name ?? u.nombre ?? u.fullName ?? u.fullname ?? full;
+    this.displayName = (name && name.length > 0) ? name : 'Usuario';
+  }
+}

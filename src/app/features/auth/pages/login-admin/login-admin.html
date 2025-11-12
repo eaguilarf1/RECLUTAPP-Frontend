@@ -10,7 +10,6 @@
 </section>
 
 <div class="shell">
-
   <div class="grid grid--single">
     <article class="card card--solid">
       <header class="card__head">
@@ -22,15 +21,17 @@
         <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
           <div class="field">
             <label for="email">Correo electrónico</label>
-            <input id="email" type="email" placeholder="admin@reclutapp.com" formControlName="email" />
+            <input id="email" type="email" placeholder="admin@reclutapp.local" formControlName="email" autocomplete="username" />
           </div>
 
           <div class="field">
             <label for="password">Contraseña</label>
-            <input id="password" type="password" placeholder="••••••••" formControlName="password" />
+            <input id="password" type="password" placeholder="••••••••" formControlName="password" autocomplete="current-password" />
           </div>
 
-          <button class="btn btn--primary btn--xl btn--pill" type="submit">Iniciar sesión</button>
+          <button class="btn btn--primary btn--xl btn--pill" type="submit" [disabled]="form.invalid || loading">
+            {{ loading ? 'Ingresando...' : 'Iniciar sesión' }}
+          </button>
 
           <a class="link" [routerLink]="['/auth/forgot']">¿Olvidaste tu contraseña?</a>
         </form>

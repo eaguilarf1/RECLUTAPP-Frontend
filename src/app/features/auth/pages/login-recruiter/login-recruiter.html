@@ -10,7 +10,6 @@
 </section>
 
 <div class="shell">
-
   <div class="grid grid--single">
     <article class="card card--solid">
       <header class="card__head">
@@ -30,7 +29,9 @@
             <input id="password" type="password" placeholder="••••••••" formControlName="password" />
           </div>
 
-          <button class="btn btn--primary btn--xl btn--pill" type="submit">Iniciar sesión</button>
+          <button class="btn btn--primary btn--xl btn--pill" type="submit" [disabled]="loading || form.invalid">
+            Iniciar sesión
+          </button>
 
           <a class="link" [routerLink]="['/auth/forgot']">¿Olvidaste tu contraseña?</a>
         </form>

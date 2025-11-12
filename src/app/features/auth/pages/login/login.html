@@ -9,7 +9,6 @@
   </div>
 </section>
 
-<!-- Contenedor de tarjetas -->
 <section class="shell">
   <div class="grid">
 
@@ -20,7 +19,8 @@
         <p class="muted">Accede con tu correo y contraseña.</p>
       </header>
 
-      <form class="card__body" (ngSubmit)="login()">
+      <!-- IMPORTANTE: novalidate + ngSubmit -->
+      <form class="card__body" novalidate #f="ngForm" (ngSubmit)="login()">
         <div class="field">
           <label>Correo electrónico</label>
           <input
@@ -43,9 +43,14 @@
           />
         </div>
 
-        <button type="submit" class="btn btn--primary btn--xl btn--pill">
-          Iniciar sesión
-        </button>
+        <!-- Respaldo con (click) para asegurar el disparo -->
+<button
+  type="submit"
+  class="btn btn--primary btn--xl btn--pill"
+  [disabled]="loading || !f.valid">
+  Iniciar sesión
+</button>
+
 
         <a class="link" routerLink="/auth/forgot">¿Olvidaste tu contraseña?</a>
       </form>
@@ -65,13 +70,13 @@
 
         <div class="divider"><span>o</span></div>
 
-<a class="btn btn--outline btn--xl btn--pill" [routerLink]="['/auth/login-reclutador']">
-  <span class="ico user"></span> Soy reclutador
-</a>
+        <a class="btn btn--outline btn--xl btn--pill" [routerLink]="['/auth/login-reclutador']">
+          <span class="ico user"></span> Soy reclutador
+        </a>
 
-<a class="btn btn--outline btn--xl btn--pill" [routerLink]="['/auth/login-admin']">
-  <span class="ico shield"></span> Soy administrador
-</a>
+        <a class="btn btn--outline btn--xl btn--pill" [routerLink]="['/auth/login-admin']">
+          <span class="ico shield"></span> Soy administrador
+        </a>
       </div>
     </article>
 

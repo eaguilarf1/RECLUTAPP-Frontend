@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 
 type Vacante = { puesto: string; fecha: string; estado: 'Abierta'|'Cerrada' };
 
@@ -23,7 +24,13 @@ type Vacante = { puesto: string; fecha: string; estado: 'Abierta'|'Cerrada' };
   styleUrls: ['./dashboard.scss'],
 })
 export class RecruiterDashboardComponent {
-   constructor(private router: Router) {}
+  constructor(private router: Router, private auth: AuthService) {
+    const u = this.auth.user ?? {};
+    const raw = (u.name ?? u.nombre ?? '').toString().trim();
+    this.userName = raw.split(' ')[0] || 'Reclutador';
+  }
+
+  userName = '';
   displayedColumns = ['puesto','fecha','estado'];
   vacantes: Vacante[] = [
     { puesto: 'Analista de datos',     fecha: '15/08/2025', estado: 'Abierta' },

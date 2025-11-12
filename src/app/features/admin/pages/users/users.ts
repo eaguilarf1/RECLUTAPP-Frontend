@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -7,6 +7,7 @@ import {
   FormGroup,
   FormControl,
 } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { AuthService } from '../../../../core/services/auth.service';
 
 type Rol = 'Admin' | 'Reclutador' | 'Candidato';
 
@@ -23,10 +25,9 @@ interface UserRow {
   nombre: string;
   correo: string;
   rol: Rol;
-  fecha: string; // dd/MM/yyyy
+  fecha: string;
 }
 
-/** Forma tipada del formulario de edición */
 interface EditForm {
   nombre: FormControl<string>;
   correo: FormControl<string>;
@@ -39,6 +40,7 @@ interface EditForm {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterModule,
     MatTableModule,
     MatIconModule,
     MatButtonModule,
@@ -51,23 +53,18 @@ interface EditForm {
   templateUrl: './users.html',
   styleUrls: ['./users.scss'],
 })
-export class AdminUsersPage {
+export class AdminUsersPage implements OnInit {
   private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
 
   displayedColumns = ['nombre', 'correo', 'rol', 'fecha', 'acciones'];
 
-  data: UserRow[] = [
-    { id: '1', nombre: 'Juan Pérez',   correo: 'juan.perez@example.com',       rol: 'Admin',      fecha: '15/08/2025' },
-    { id: '2', nombre: 'Ana López',    correo: 'ana.lopez@example.com',        rol: 'Reclutador', fecha: '10/08/2025' },
-    { id: '3', nombre: 'Carlos Gómez', correo: 'carlos.gomez@example.com',     rol: 'Candidato',  fecha: '05/08/2025' },
-    { id: '4', nombre: 'Laura Martínez', correo: 'laura.martinez@example.com', rol: 'Candidato',  fecha: '01/08/2025' },
-  ];
+  data: UserRow[] = [];
 
   roles: Rol[] = ['Admin', 'Reclutador', 'Candidato'];
 
   editingId: string | null = null;
 
-  /** Formulario no-nullable y tipado: evita el error de validators -> Rol */
   editForm: FormGroup<EditForm> = this.fb.group<EditForm>({
     nombre: this.fb.nonNullable.control('', [
       Validators.required,
@@ -80,9 +77,49 @@ export class AdminUsersPage {
     rol: this.fb.nonNullable.control<Rol>('Candidato', [Validators.required]),
   });
 
+  ngOnInit(): void {
+    this.load();
+  }
+
+  private toUiRole(domain: any): Rol {
+    const s = (domain ?? '').toString().toLowerCase();
+    if (s.startsWith('admin') || domain === 0 || domain === '0') return 'Admin';
+    if (s.startsWith('recru') || domain === 1 || domain === '1') return 'Reclutador';
+    return 'Candidato';
+  }
+
+  private toDomainRole(ui: Rol): 'Admin' | 'Recruiter' | 'Candidate' {
+    if (ui === 'Admin') return 'Admin';
+    if (ui === 'Reclutador') return 'Recruiter';
+    return 'Candidate';
+  }
+
+  private fmtDate(d: string | Date): string {
+    const dd = new Date(d);
+    const day = String(dd.getDate()).padStart(2, '0');
+    const mon = String(dd.getMonth() + 1).padStart(2, '0');
+    const yr = dd.getFullYear();
+    return `${day}/${mon}/${yr}`;
+  }
+
+  load() {
+    this.auth.adminListUsers(1, 50).subscribe({
+      next: (res: any) => {
+        const items = res?.items ?? [];
+        this.data = items.map((u: any) => ({
+          id: u.id,
+          nombre: u.name,
+          correo: u.email,
+          rol: this.toUiRole(u.role),
+          fecha: this.fmtDate(u.createdAt),
+        }));
+      },
+      error: () => {},
+    });
+  }
+
   startEdit(row: UserRow) {
     this.editingId = row.id;
-    // Cargamos valores en el formulario (coinciden los tipos)
     this.editForm.setValue({
       nombre: row.nombre,
       correo: row.correo,
@@ -92,7 +129,6 @@ export class AdminUsersPage {
 
   cancelEdit() {
     this.editingId = null;
-    // Restauramos el formulario a un estado válido (no-nullable)
     this.editForm.reset({
       nombre: '',
       correo: '',
@@ -105,20 +141,36 @@ export class AdminUsersPage {
       this.editForm.markAllAsTouched();
       return;
     }
-
-    const { nombre, correo, rol } = this.editForm.getRawValue(); // todos son string/Rol
-    row.nombre = nombre;
-    row.correo = correo;
-    row.rol = rol;
-
-    // TODO: PUT /users/:id con row.id y los nuevos datos
-
-    this.cancelEdit();
+    const { nombre, correo, rol } = this.editForm.getRawValue();
+    this.auth
+      .adminUpdateUser(row.id, {
+        name: nombre,
+        email: correo,
+        role: this.toDomainRole(rol),
+      })
+      .subscribe({
+        next: () => {
+          row.nombre = nombre;
+          row.correo = correo;
+          row.rol = rol;
+          this.cancelEdit();
+        },
+        error: (e) => {
+          alert(e?.error?.message || 'No se pudo actualizar el usuario.');
+        },
+      });
   }
 
   delete(row: UserRow) {
-    // TODO: confirmar y llamar a la API (DELETE /users/:id)
-    this.data = this.data.filter((u) => u.id !== row.id);
+    if (!confirm(`¿Eliminar a ${row.nombre}?`)) return;
+    this.auth.adminDeleteUser(row.id).subscribe({
+      next: () => {
+        this.data = this.data.filter((u) => u.id !== row.id);
+      },
+      error: (e) => {
+        alert(e?.error?.message || 'No se pudo eliminar el usuario.');
+      },
+    });
   }
 
   isEditing(row: UserRow) {

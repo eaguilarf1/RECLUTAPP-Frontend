@@ -1,14 +1,14 @@
 <div class="wrap">
   <mat-card class="card">
-    <h1 class="title">¡Bienvenido!</h1>
+    <h1 class="title">¡Bienvenido, {{ userName }}!</h1>
 
     <div class="cta-row">
       <button mat-raised-button color="primary" class="cta" (click)="crearVacante()">
         Crear vacante
       </button>
-<button mat-raised-button color="primary" routerLink="/reclutador/buscar-perfiles">
-  Buscar perfiles
-</button>
+      <button mat-raised-button color="primary" routerLink="/reclutador/buscar-perfiles">
+        Buscar perfiles
+      </button>
     </div>
 
     <mat-divider class="sep"></mat-divider>
