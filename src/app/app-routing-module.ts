@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// Guard de autenticación por rol 
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth/login' },
 
-  // --- AUTH ---
   {
     path: 'auth/login',
     loadComponent: () =>
@@ -37,7 +35,6 @@ const routes: Routes = [
         .then(m => m.ForgotPasswordComponent),
   },
 
-  // --- CANDIDATO ---
   {
     path: 'candidato',
     canActivate: [AuthGuard],
@@ -79,7 +76,6 @@ const routes: Routes = [
     ],
   },
 
-  // --- RECLUTADOR ---
   {
     path: 'reclutador',
     canActivate: [AuthGuard],
@@ -119,6 +115,12 @@ const routes: Routes = [
             .then(m => m.RecruiterRecommendationsComponent),
       },
       {
+        path: 'recomendaciones/contactar',
+        loadComponent: () =>
+          import('./features/recruiter/pages/recommendation-contact/recommendation-contact')
+            .then(m => m.RecommendationContactComponent),
+      },
+      {
         path: 'buscar-perfiles',
         loadComponent: () =>
           import('./features/recruiter/pages/search-profiles/search-profiles')
@@ -127,7 +129,6 @@ const routes: Routes = [
     ],
   },
 
-  // --- ADMINISTRADOR ---
   {
     path: 'admin',
     canActivate: [AuthGuard],

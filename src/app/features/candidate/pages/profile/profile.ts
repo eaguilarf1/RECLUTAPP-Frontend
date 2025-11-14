@@ -28,11 +28,12 @@ export class ProfileComponent {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
 
-  private cvUrlKey!: string;
   private cvNameKey!: string;
+  private cvDataKey!: string;
 
   cvFileName: string | null = null;
   cvUrl: string | null = null;
+  cvData: string | null = null;
 
   form = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -46,11 +47,16 @@ export class ProfileComponent {
     const email = (u.email ?? '').toString();
     const keyBase = id ? `cv_${id}` : (email ? `cv_${email}` : 'cv_default');
 
-    this.cvUrlKey = `${keyBase}_url`;
     this.cvNameKey = `${keyBase}_name`;
+    this.cvDataKey = `${keyBase}_data`;
 
     this.cvFileName = localStorage.getItem(this.cvNameKey) ?? null;
-    this.cvUrl = localStorage.getItem(this.cvUrlKey) ?? null;
+    this.cvData = localStorage.getItem(this.cvDataKey) ?? null;
+
+    if (this.cvData) {
+      const blob = this.base64ToBlob(this.cvData, 'application/pdf');
+      this.cvUrl = URL.createObjectURL(blob);
+    }
 
     this.form.patchValue({
       nombre: (u.name ?? u.nombre ?? '').toString().trim(),
@@ -127,18 +133,36 @@ export class ProfileComponent {
     if (!isPdf) { alert('Solo se permiten archivos PDF.'); input.value = ''; return; }
     if (file.size > maxBytes) { alert('El archivo supera el tamaño máximo permitido (5 MB).'); input.value = ''; return; }
 
-    if (this.cvUrl) URL.revokeObjectURL(this.cvUrl);
-    this.cvUrl = URL.createObjectURL(file);
-    this.cvFileName = file.name;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(',')[1] || '';
 
-    localStorage.setItem(this.cvUrlKey, this.cvUrl);
-    localStorage.setItem(this.cvNameKey, this.cvFileName);
+      if (this.cvUrl) URL.revokeObjectURL(this.cvUrl);
+      const blob = this.base64ToBlob(base64, 'application/pdf');
+      this.cvUrl = URL.createObjectURL(blob);
 
-    alert('Curriculum adjuntado (mock): ' + file.name);
+      this.cvFileName = file.name;
+      this.cvData = base64;
+
+      localStorage.setItem(this.cvNameKey, this.cvFileName);
+      localStorage.setItem(this.cvDataKey, base64);
+
+      alert('Curriculum adjuntado (mock): ' + file.name);
+    };
+    reader.readAsDataURL(file);
   }
 
   viewCv() {
     if (this.cvUrl) window.open(this.cvUrl, '_blank');
+  }
+
+  private base64ToBlob(base64: string, type: string): Blob {
+    const byteString = atob(base64);
+    const len = byteString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) bytes[i] = byteString.charCodeAt(i);
+    return new Blob([bytes], { type });
   }
 }
 

@@ -42,6 +42,10 @@ export class VacancyDetailComponent implements OnInit {
 
   vacante?: Vacante;
   cvNombre: string | null = null;
+  cvUrl: string | null = null;
+
+  private userKey = 'default';
+  private appsKey = 'reclutapp_apps_default';
 
   get cvTexto() {
     return this.cvNombre ?? 'No tienes currículum guardado. Actualízalo en tu perfil.';
@@ -55,7 +59,7 @@ export class VacancyDetailComponent implements OnInit {
     telefono: ['+502 5555-5555', [Validators.required, (c: AbstractControl) =>
       this.GT_PHONE.test(String(c.value ?? '')) ? null : { phone: true }
     ]],
-    mensaje: ['Estoy interesado en la vacante.', [Validators.required, Validators.minLength(10)]],
+    mensaje: ['']
   });
 
   ngOnInit(): void {
@@ -82,8 +86,14 @@ export class VacancyDetailComponent implements OnInit {
     const emailKey = (u.email ?? '').toString();
     const keyBase = idKey ? `cv_${idKey}` : (emailKey ? `cv_${emailKey}` : 'cv_default');
     const cvNameKey = `${keyBase}_name`;
+    const cvUrlKey = `${keyBase}_url`;
     const existingCvName = localStorage.getItem(cvNameKey);
+    const existingCvUrl = localStorage.getItem(cvUrlKey);
     if (existingCvName) this.cvNombre = existingCvName;
+    if (existingCvUrl) this.cvUrl = existingCvUrl;
+
+    this.userKey = idKey || emailKey || 'anon';
+    this.appsKey = `reclutapp_apps_${this.userKey}`;
 
     const id = String(this.route.snapshot.paramMap.get('id'));
     this.vacanciesSvc.get(id).subscribe((v: VacancyItem) => {
@@ -118,7 +128,65 @@ export class VacancyDetailComponent implements OnInit {
   }
 
   postular() {
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const recKey = 'reclutapp_recommendations';
+    let stored: any[] = [];
+    try {
+      stored = JSON.parse(localStorage.getItem(recKey) ?? '[]');
+      if (!Array.isArray(stored)) stored = [];
+    } catch {
+      stored = [];
+    }
+
+    let cvData: string | undefined;
+    try {
+      const cvKey = localStorage.key(0);
+      if (this.cvUrl && cvKey) {
+        cvData = undefined;
+      }
+    } catch {
+      cvData = undefined;
+    }
+
+    const now = new Date();
+    const fecha = now.toLocaleDateString('es-GT');
+
+    const rec = {
+      puesto: this.vacante?.titulo ?? 'Vacante',
+      candidato: (this.form.value.nombre ?? '').toString(),
+      email: (this.form.value.email ?? '').toString(),
+      fecha,
+      telefono: (this.form.value.telefono ?? '').toString(),
+      mensaje: (this.form.value.mensaje ?? '').toString().trim(),
+      cvNombre: this.cvNombre,
+      cvData
+    };
+
+    stored.unshift(rec);
+    localStorage.setItem(recKey, JSON.stringify(stored));
+
+    let apps: any[] = [];
+    try {
+      apps = JSON.parse(localStorage.getItem(this.appsKey) ?? '[]');
+      if (!Array.isArray(apps)) apps = [];
+    } catch {
+      apps = [];
+    }
+
+    const app = {
+      vacanteId: this.vacante?.id ?? null,
+      puesto: this.vacante?.titulo ?? 'Vacante',
+      fecha,
+      estado: 'En revisión'
+    };
+
+    apps.unshift(app);
+    localStorage.setItem(this.appsKey, JSON.stringify(apps));
+
     console.log('Postulación (mock):', { vacanteId: this.vacante?.id, ...this.form.value, cv: this.cvNombre });
     alert('¡Tu postulación fue enviada (mock)!');
     this.router.navigate(['/candidato/solicitudes']);

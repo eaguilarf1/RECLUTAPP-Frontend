@@ -1,0 +1,48 @@
+<div class="wrap" *ngIf="rec">
+  <div class="card">
+    <h1 class="title">Información de contacto</h1>
+    <p class="subtitle">
+      Postulación a: {{ rec.puesto }} • {{ rec.fecha }}
+    </p>
+
+    <mat-divider></mat-divider>
+
+    <form [formGroup]="form" class="contact-form">
+      <div class="fields-row">
+        <mat-form-field appearance="outline" class="field compact">
+          <mat-label>Nombre completo</mat-label>
+          <input matInput formControlName="nombre" readonly />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field compact">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" readonly />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="field compact">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono" readonly />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Mensaje/Carta de presentación</mat-label>
+        <textarea
+          matInput
+          rows="5"
+          formControlName="mensaje"
+          readonly
+        ></textarea>
+      </mat-form-field>
+    </form>
+
+    <mat-divider></mat-divider>
+
+    <div class="actions">
+      <button mat-button type="button" (click)="volver()">Volver</button>
+      <button mat-raised-button color="primary" type="button" (click)="generarCorreo()">
+        Generar correo
+      </button>
+    </div>
+  </div>
+</div>

@@ -3,10 +3,20 @@
     <h1 class="title">¡Bienvenido, {{ userName }}!</h1>
 
     <div class="cta-row">
-      <button mat-raised-button color="primary" class="cta" (click)="crearVacante()">
+      <button
+        mat-raised-button
+        color="primary"
+        class="cta"
+        (click)="crearVacante()"
+      >
         Crear vacante
       </button>
-      <button mat-raised-button color="primary" routerLink="/reclutador/buscar-perfiles">
+      <button
+        mat-raised-button
+        color="primary"
+        class="cta"
+        (click)="buscarPerfiles()"
+      >
         Buscar perfiles
       </button>
     </div>
@@ -23,21 +33,30 @@
         </ng-container>
 
         <ng-container matColumnDef="fecha">
-          <th mat-header-cell *matHeaderCellDef>Fecha de publicación</th>
+          <th mat-header-cell *matHeaderCellDef>
+            Fecha de publicación
+          </th>
           <td mat-cell *matCellDef="let v">{{ v.fecha }}</td>
         </ng-container>
 
         <ng-container matColumnDef="estado">
           <th mat-header-cell *matHeaderCellDef>Estado</th>
           <td mat-cell *matCellDef="let v">
-            <mat-chip [ngClass]="v.estado === 'Abierta' ? 'chip-open' : 'chip-closed'">
+            <mat-chip
+              [ngClass]="
+                v.estado === 'Abierta' ? 'chip-open' : 'chip-closed'
+              "
+            >
               {{ v.estado }}
             </mat-chip>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+        ></tr>
       </table>
     </div>
   </mat-card>

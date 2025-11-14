@@ -4,28 +4,63 @@
   <!-- Currículum -->
   <mat-card class="card">
     <div class="card-header">Currículum</div>
-    <div class="cv">
+
+    <div class="cv" *ngIf="hasCv; else noCv">
       <mat-icon class="pdf">picture_as_pdf</mat-icon>
       <div class="cv-name">{{ cvNombre }}</div>
     </div>
-    <button mat-raised-button color="primary" class="btn">Subir nuevo</button>
+
+    <ng-template #noCv>
+      <div class="cv empty-cv">
+        <mat-icon class="pdf">picture_as_pdf</mat-icon>
+        <div class="cv-name">Aún no has cargado tu currículum</div>
+      </div>
+    </ng-template>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="btn"
+      (click)="abrirPerfil()"
+    >
+      Subir nuevo
+    </button>
   </mat-card>
 
   <!-- Vacantes sugeridas -->
   <mat-card class="card">
     <div class="card-header">Vacantes sugeridas</div>
-    <div class="suggest">
-      <div class="puesto">{{ sugerida.puesto }}</div>
-      <div class="meta">{{ sugerida.ciudad }}</div>
-      <div class="meta">{{ sugerida.fecha }}</div>
-    </div>
-    <button mat-raised-button color="primary" class="btn" routerLink="/candidato/solicitudes">Ver vacante</button>
+
+    <ng-container *ngIf="sugerida; else noVac">
+      <div class="suggest">
+        <div class="puesto">{{ sugerida!.puesto }}</div>
+        <div class="meta">{{ sugerida!.ciudad }}</div>
+        <div class="meta">{{ sugerida!.fecha }}</div>
+      </div>
+      <button
+        mat-raised-button
+        color="primary"
+        class="btn"
+        (click)="verVacante()"
+      >
+        Ver vacante
+      </button>
+    </ng-container>
+
+    <ng-template #noVac>
+      <div class="suggest empty-suggest">
+        <div class="meta">No hay vacantes disponibles por ahora.</div>
+      </div>
+      <button mat-raised-button color="primary" class="btn" disabled>
+        Ver vacante
+      </button>
+    </ng-template>
   </mat-card>
 </div>
 
 <h2 class="section">Mis solicitudes recientes</h2>
 
-<div class="table-wrap">
+<div class="table-wrap" *ngIf="solicitudes.length > 0; else sinSolicitudes">
   <table mat-table [dataSource]="solicitudes" class="mat-elevation-z0">
     <!-- Puesto -->
     <ng-container matColumnDef="puesto">
@@ -44,16 +79,23 @@
       <th mat-header-cell *matHeaderCellDef>Estado</th>
       <td mat-cell *matCellDef="let s">
         <mat-chip-set>
-          <mat-chip [ngClass]="{
-            rev: s.estado==='En revisión',
-            rej: s.estado==='Rechazada',
-            ok:  s.estado==='Aceptada'
-          }">{{ s.estado }}</mat-chip>
+          <mat-chip [ngClass]="estadoClass(s.estado)">
+            {{ s.estado }}
+          </mat-chip>
         </mat-chip-set>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 </div>
+
+<ng-template #sinSolicitudes>
+  <div class="empty">
+    <div class="empty-title">Aún no has enviado solicitudes</div>
+    <div class="empty-sub">
+      Cuando postules a una vacante, aparecerán aquí las más recientes.
+    </div>
+  </div>
+</ng-template>

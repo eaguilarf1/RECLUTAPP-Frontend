@@ -1,11 +1,11 @@
 <h1 class="title">Mis Solicitudes</h1>
 
-<div class="empty" *ngIf="!solicitudes?.length">
+<div class="empty" *ngIf="!solicitudes.length">
   <div class="empty-title">Aún no has enviado solicitudes</div>
   <div class="empty-sub">Cuando postules a una vacante, aparecerá aquí.</div>
 </div>
 
-<div class="table-wrap" *ngIf="solicitudes?.length">
+<div class="table-wrap" *ngIf="solicitudes.length">
   <table mat-table [dataSource]="solicitudes" class="mat-elevation-z0">
 
     <ng-container matColumnDef="puesto">
