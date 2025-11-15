@@ -19,7 +19,6 @@
         <p class="muted">Accede con tu correo y contraseña.</p>
       </header>
 
-      <!-- IMPORTANTE: novalidate + ngSubmit -->
       <form class="card__body" novalidate #f="ngForm" (ngSubmit)="login()">
         <div class="field">
           <label>Correo electrónico</label>
@@ -43,14 +42,19 @@
           />
         </div>
 
-        <!-- Respaldo con (click) para asegurar el disparo -->
-<button
-  type="submit"
-  class="btn btn--primary btn--xl btn--pill"
-  [disabled]="loading || !f.valid">
-  Iniciar sesión
-</button>
+        <button
+          type="submit"
+          class="btn btn--primary btn--xl btn--pill"
+          [disabled]="loading || !f.valid">
+          Iniciar sesión
+        </button>
 
+        <div class="divider"><span>o</span></div>
+
+        <!-- Contenedor del botón oficial de Google -->
+        <div class="google-btn">
+          <div id="google-btn-login"></div>
+        </div>
 
         <a class="link" routerLink="/auth/forgot">¿Olvidaste tu contraseña?</a>
       </form>

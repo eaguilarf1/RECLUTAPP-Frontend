@@ -131,7 +131,7 @@
   transition: transform .06s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
   max-width: 100%;
 
-  &--xl   { height: 48px; padding: 0 18px; width: 100%; } /* botón principal a ancho completo */
+  &--xl   { height: 48px; padding: 0 18px; width: 100%; }
   &--pill { border-radius: 999px; }
 
   &--primary {
@@ -192,4 +192,16 @@ a.btn {
 a.btn:hover,
 a.btn:focus {
   text-decoration: none !important;
+}
+
+.google-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4px;
+}
+
+#google-btn-login {
+  display: flex;
+  justify-content: center;
 }

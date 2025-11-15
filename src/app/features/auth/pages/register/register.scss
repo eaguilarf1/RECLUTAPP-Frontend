@@ -23,24 +23,61 @@
   color: #1f2937;
 }
 
-.form { display: grid; gap: 12px; }
+.form {
+  display: grid;
+  gap: 12px;
+}
 
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  @media (max-width: 680px) { grid-template-columns: 1fr; }
+
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.field.compact { width: 100%; }
-.field.compact .mat-mdc-text-field-wrapper { height: 44px; }
+.field.compact {
+  width: 100%;
+}
+
+.field.compact .mat-mdc-text-field-wrapper {
+  height: 44px;
+}
+
 .field.compact .mat-mdc-form-field-infix {
   padding-top: 6px !important;
   padding-bottom: 6px !important;
 }
-.field.compact .mat-mdc-form-field-subscript-wrapper { margin-top: 2px; }
 
-.btn { width: 100%; margin-top: 6px; }
-.login-link { text-align: center; margin-top: 6px; }
-.login-link a { text-decoration: none; color: #1d4ed8; font-weight: 600; }
-.login-link a:hover { text-decoration: underline; }
+.field.compact .mat-mdc-form-field-subscript-wrapper {
+  margin-top: 2px;
+}
+
+.btn {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 6px;
+}
+
+.login-link a {
+  text-decoration: none;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.google-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
